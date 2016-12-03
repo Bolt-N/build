@@ -1968,7 +1968,14 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CUSTOM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CUSTOM_TARGET_PACKAGE) > $(CUSTOM_TARGET_PACKAGE).md5sum
-	@echo "Package Complete: $(CUSTOM_TARGET_PACKAGE)"
+	@echo -e ""
+	@echo -e "██████╗  ██████╗ ██╗  ████████╗    ██████╗ ███████╗"
+	@echo -e "██╔══██╗██╔═══██╗██║  ╚══██╔══╝   ██╔═══██╗██╔════╝"
+	@echo -e "██████╔╝██║   ██║██║     ██║█████╗██║   ██║███████╗"
+	@echo -e "██╔══██╗██║   ██║██║     ██║╚════╝██║   ██║╚════██║"
+	@echo -e "██████╔╝╚██████╔╝███████╗██║      ╚██████╔╝███████║"
+	@echo -e "╚═════╝  ╚═════╝ ╚══════╝╚═╝       ╚═════╝ ╚══════╝"
+	@echo -e "Bolt-Os Ready!!: $(CUSTOM_TARGET_PACKAGE)"
 
 endif    # build_ota_package
 

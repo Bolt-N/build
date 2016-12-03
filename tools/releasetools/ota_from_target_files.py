@@ -635,6 +635,17 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
 
+  script.Print("/       \           /  |  /  |            /      \           ")
+  script.Print("$$$$$$$  |  ______  $$ | _$$ |_          /$$$$$$  |  _______ ")
+  script.Print("$$ |__$$ | /      \ $$ |/ $$   |  ______ $$ |  $$ | /       |")
+  script.Print("$$    $$< /$$$$$$  |$$ |$$$$$$/  /      |$$ |  $$ |/$$$$$$$/ ")
+  script.Print("$$$$$$$  |$$ |  $$ |$$ |  $$ | __$$$$$$/ $$ |  $$ |$$      \ ")
+  script.Print("$$ |__$$ |$$ \__$$ |$$ |  $$ |/  |       $$ \__$$ | $$$$$$  |")
+  script.Print("$$    $$/ $$    $$/ $$ |  $$  $$/        $$    $$/ /     $$/ ")
+  script.Print("$$$$$$$/   $$$$$$/  $$/    $$$$/          $$$$$$/  $$$$$$$/  ") 
+  script.Print("                      BOLT-OS ROM                            ")
+  script.Print("Running backup scripts and setting permissions...")
+
   if OPTIONS.backuptool:
     if block_based:
       common.ZipWriteStr(output_zip, "system/bin/backuptool.sh",
@@ -726,7 +737,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     if block_based:
       script.Unmount("/system")
 
-
+  script.Print(" ")
+  script.Print("Flashing BoltsKernel..")
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
 
