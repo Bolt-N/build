@@ -1951,9 +1951,6 @@ INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
 $(INTERNAL_OTA_PACKAGE_TARGET): KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
 
-BOOT_ZIP_FROM_IMAGE_SCRIPT := ./build/tools/releasetools/boot_flash_from_image
-KERNEL_PATH := $(TARGET_KERNEL_SOURCE)/arch/arm64/configs/$(TARGET_KERNEL_CONFIG)
-
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	@echo "Package OTA: $@"
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
@@ -1966,9 +1963,9 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 
 CUSTOM_TARGET_PACKAGE := $(PRODUCT_OUT)/bolt-$(ANDROID_NAME)-$(ROM_VERSION).zip
 
-.PHONY: otapackage bacon bootzip
+.PHONY: otapackage bolt bootzip
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
-bacon: otapackage
+bolt: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CUSTOM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CUSTOM_TARGET_PACKAGE) > $(CUSTOM_TARGET_PACKAGE).md5sum
 	@echo -e ""
@@ -1979,12 +1976,6 @@ bacon: otapackage
 	@echo -e "██████╔╝╚██████╔╝███████╗██║      ╚██████╔╝███████║"
 	@echo -e "╚═════╝  ╚═════╝ ╚══════╝╚═╝       ╚═════╝ ╚══════╝"
 	@echo -e "Bolt-Os Ready!!: $(CUSTOM_TARGET_PACKAGE)"
-
-bootzip: bootimage
-	   $(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
-	   $(recovery_fstab) \
-	   $(OUT) \
-	   $(TARGET_DEVICE)
 
 endif    # build_ota_package
 
