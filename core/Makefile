@@ -1945,11 +1945,11 @@ name := $(TARGET_PRODUCT)
 ifeq ($(TARGET_BUILD_TYPE),debug)
   name := $(name)_debug
 endif
-name := $(name)-$(shell date +"%Y-%m-%d")
+name := $(name)-ota-$(shell date +"%-m-%-e-%-y")
 
 INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
-INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/bolt-$(TARGET_DEVICE)-$(BOLT_VERSION).zip
+$(INTERNAL_OTA_PACKAGE_TARGET): KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
 
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	@echo "Package OTA: $@"
@@ -1961,8 +1961,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-
-CUSTOM_TARGET_PACKAGE := $(PRODUCT_OUT)/bolt_$(TARGET_PRODUCT)-$(BOLT_VERSION).zip
+CUSTOM_TARGET_PACKAGE := $(PRODUCT_OUT)/bolt-$(ANDROID_NAME)-$(ROM_VERSION).zip
 
 .PHONY: otapackage bolt bootzip
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
