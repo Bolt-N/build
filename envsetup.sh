@@ -23,12 +23,10 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - godir:     Go to the directory containing a file.
 - mka:       Builds using SCHED_BATCH on all processors
 - reposync:  Parallel repo sync using ionice and SCHED_BATCH
-
 Environment options:
 - SANITIZE_HOST: Set to 'true' to use ASAN for all host modules. Note that
                  ASAN_OPTIONS=detect_leaks=0 will be set by default until the
                  build is leak-check clean.
-
 Look at the source to view more functions. The complete list is:
 EOF
     T=$(gettop)
@@ -271,10 +269,6 @@ function setpaths()
     unset ANDROID_HOST_OUT
     export ANDROID_HOST_OUT=$(get_abs_build_var HOST_OUT)
 
-    if [ -n "$ANDROID_CCACHE_DIR" ]; then
-        export CCACHE_DIR=$ANDROID_CCACHE_DIR
-    fi
-
     # needed for building linux on MacOS
     # TODO: fix the path
     #export HOST_EXTRACFLAGS="-I "$T/system/kernel_headers/host_include
@@ -315,9 +309,9 @@ function settitle()
         local variant=$TARGET_BUILD_VARIANT
         local apps=$TARGET_BUILD_APPS
         if [ -z "$apps" ]; then
-            export PROMPT_COMMAND="echo -ne \"\033]0;[${arch}-${product}-${variant}] bolt@buildbox: ${PWD}\007\"""
+            export PROMPT_COMMAND="echo -ne \"\033]0;[${arch}-${product}-${variant}] benzo@buildbox: ${PWD}\007\""
         else
-            export PROMPT_COMMAND="echo -ne \"\033]0;[$arch $apps $variant] bolt@buildbox}: ${PWD}\007\""
+            export PROMPT_COMMAND="echo -ne \"\033]0;[$arch $apps $variant] benzo@buildbox}: ${PWD}\007\""
         fi
     fi
 }
@@ -527,8 +521,6 @@ function add_lunch_combo()
     LUNCH_MENU_CHOICES=(${LUNCH_MENU_CHOICES[@]} $new_combo)
 }
 
-# add the default one here
-
 function print_lunch_menu()
 {
     local uname=$(uname)
@@ -541,58 +533,12 @@ function print_lunch_menu()
     local choice
     for choice in ${LUNCH_MENU_CHOICES[@]}
     do
-        echo " $i. $choice "
+        echo "     $i. $choice"
         i=$(($i+1))
-    done | column
+    done
 
     echo
 }
-
-function brunch()
-{
-    breakfast $*
-    if [ $? -eq 0 ]; then
-        mka bolt
-    else
-        echo "No such item in brunch menu. Try 'breakfast' or 'bib'"
-        return 1
-    fi
-    return $?
-}
-
-function breakfast()
-{
-    target=$1
-    local variant=$2
-    unset LUNCH_MENU_CHOICES
-    add_lunch_combo full-eng
-    for f in `/bin/ls vendor/dk/vendorsetup.sh 2> /dev/null`
-        do
-            echo "including $f"
-            . $f
-        done
-    unset f
-
-    if [ $# -eq 0 ]; then
-        # No arguments, so let's have the full menu
-        lunch
-    else
-        echo "z$target" | grep -q "-"
-        if [ $? -eq 0 ]; then
-            # A buildtype was specified, assume a full device name
-            lunch $target
-        else
-            # This is probably just the BOLT model name
-            if [ -z "$variant" ]; then
-                variant="user"
-            fi
-            lunch bolt_$target-$variant
-        fi
-    fi
-    return $?
-}
-
-alias bib=breakfast
 
 function lunch()
 {
@@ -761,6 +707,7 @@ function gettop
             fi
         fi
     fi
+  export ANDROID_BUILD_TOP=$T
 }
 
 # Return driver for "make", if any (eg. static analyzer)
