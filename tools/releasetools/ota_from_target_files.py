@@ -635,16 +635,19 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
 
-  script.Print("/       \           /  |  /  |            /      \           ")
-  script.Print("$$$$$$$  |  ______  $$ | _$$ |_          /$$$$$$  |  _______ ")
-  script.Print("$$ |__$$ | /      \ $$ |/ $$   |  ______ $$ |  $$ | /       |")
-  script.Print("$$    $$< /$$$$$$  |$$ |$$$$$$/  /      |$$ |  $$ |/$$$$$$$/ ")
-  script.Print("$$$$$$$  |$$ |  $$ |$$ |  $$ | __$$$$$$/ $$ |  $$ |$$      \ ")
-  script.Print("$$ |__$$ |$$ \__$$ |$$ |  $$ |/  |       $$ \__$$ | $$$$$$  |")
-  script.Print("$$    $$/ $$    $$/ $$ |  $$  $$/        $$    $$/ /     $$/ ")
-  script.Print("$$$$$$$/   $$$$$$/  $$/    $$$$/          $$$$$$/  $$$$$$$/  ") 
-  script.Print("                      BOLT-OS ROM                            ")
-  script.Print("Running backup scripts and setting permissions...")
+  script.Print("_______  _______  __     ________   ")
+  script.Print("| __   / |  ___  \ | |   |___ ___|  ")
+  script.Print("|  |>  \ | |   |  || |      | |     ")
+  script.Print("|  |>   \| |___|  || |____  | |     ")
+  script.Print("|_______/ \______/ |______| |_|     ")
+  script.Print("        BOLT-OS 7.1                 ")
+  script.Print("        BY:WINGA BLINGA             ")
+  device = GetBuildProp("ro.product.device", OPTIONS.info_dict)
+  model = GetBuildProp("ro.product.model", OPTIONS.info_dict)
+  modver = GetBuildProp("ro.bolt.version", OPTIONS.info_dict)
+  script.Print(" ")
+  script.Print("Device: %s (%s)"%(model, device))
+  script.Print("Version: %s"%(modver)); 
 
   if OPTIONS.backuptool:
     if block_based:
@@ -738,7 +741,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
       script.Unmount("/system")
 
   script.Print(" ")
-  script.Print("Flashing BoltsKernel..")
+  script.Print("Flashing Bolt-OS..")
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
 

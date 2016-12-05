@@ -1389,9 +1389,7 @@ class BlockDifference(object):
     if not self.src:
       # write the output unconditionally
       script.Print(" ")
-      script.Print("Flashing System..")
-    else:
-      script.Print("Patching %s image after verification." % (self.partition,))
+      script.Print("Flashing Bolt-Os files...")
 
     if progress:
       script.ShowProgress(progress, 0)
@@ -1515,11 +1513,7 @@ class BlockDifference(object):
                          self.device, ranges_str,
                          self._HashZeroBlocks(self.tgt.extended.size())))
       script.Print(" ")
-      script.Print("Verified System..")
-      if partition == "system":
-        code = ErrorCode.SYSTEM_NONZERO_CONTENTS
-      else:
-        code = ErrorCode.VENDOR_NONZERO_CONTENTS
+      script.Print("Verified Bolt-Os files...")
       script.AppendExtra(
           'else\n'
           '  abort("E%d: %s partition has unexpected non-zero contents after '
@@ -1527,7 +1521,7 @@ class BlockDifference(object):
           'endif;' % (code, partition))
     else:
       script.Print(" ")
-      script.Print("Verified System..")
+      script.Print("Verified Bolt-Os files...")
 
     if partition == "system":
       code = ErrorCode.SYSTEM_UNEXPECTED_CONTENTS
